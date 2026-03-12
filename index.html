@@ -3,33 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fahrzeugcheck | 40 Modelle Explorer</title>
+<title>Fahrzeugcheck | Vitra Style Explorer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700&family=Lora:ital,wght@0,400;0,500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-/* ─── BASE & VITRA STYLE ─── */
 :root {
   --bg: #fdfdfd;
-  --bg-modal: #ffffff;
   --ink: #000000;
   --ink2: #4a4640;
   --ink3: #8a857e;
   --rule: #eeeeee;
   --mono: 'DM Mono', monospace;
   --green: #2d6a4f;
-  --accent: #c0392b;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: var(--bg); color: var(--ink); font-family: 'Lora', serif; -webkit-font-smoothing: antialiased; }
+body { background: var(--bg); color: var(--ink); font-family: 'Lora', serif; overflow-x: hidden; }
 
-/* ─── EXPLORER GRID ─── */
+/* ─── GRID SİSTEMİ ─── */
 .explorer-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 1px;
   background: var(--rule);
-  border-bottom: 1px solid var(--rule);
 }
 
 .grid-item {
@@ -39,74 +35,66 @@ body { background: var(--bg); color: var(--ink); font-family: 'Lora', serif; -we
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40px;
   cursor: pointer;
+  padding: 30px;
   transition: all 0.4s ease;
 }
-
-.grid-item:hover { background: #f9f9f9; }
 
 .grid-item img {
   max-width: 90%;
   max-height: 50%;
   object-fit: contain;
   filter: grayscale(100%);
-  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transition: 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-.grid-item:hover img { filter: grayscale(0%); transform: scale(1.08); }
+.grid-item:hover img { filter: grayscale(0%); transform: scale(1.05); }
 
-.item-label { margin-top: 30px; text-align: center; }
-.item-label p { font-family: var(--mono); font-size: 9px; text-transform: uppercase; color: var(--ink3); letter-spacing: 1px; }
-.item-label h3 { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 400; margin-top: 4px; }
+.item-label { margin-top: 20px; text-align: center; }
+.item-label h3 { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 400; }
 
-/* ─── POP-UP MODAL (INFO KART) ─── */
-.modal-overlay {
+/* ─── POP-UP (OVERLAY) ─── */
+#modalOverlay {
   position: fixed;
   inset: 0;
-  background: rgba(255, 255, 255, 0.98);
-  z-index: 2000;
+  background: rgba(255, 255, 255, 0.92); /* Arka planı görmeyi sağlayan hafif şeffaflık */
+  backdrop-filter: blur(5px); /* Vitra tarzı derinlik */
+  z-index: 9999;
   display: none;
-  overflow-y: auto;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.modal-overlay.active { display: block; opacity: 1; }
-
-.close-modal {
-  position: fixed;
-  top: 30px;
-  right: 30px;
-  width: 50px;
-  height: 50px;
-  border: 1px solid var(--rule);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
   justify-content: center;
-  cursor: pointer;
-  background: white;
-  font-size: 24px;
-  z-index: 2100;
+  align-items: center;
+  padding: 40px;
 }
 
-.modal-container {
-  max-width: 1200px;
-  margin: 60px auto;
-  padding: 40px;
+.modal-content {
+  background: white;
+  width: 100%;
+  max-width: 1100px;
+  max-height: 90vh;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.1);
+  border: 1px solid var(--rule);
+  overflow-y: auto;
+  position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 60px;
+  padding: 60px;
+  gap: 40px;
 }
 
-/* Modal Sol Kolon */
-.modal-left img { width: 100%; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.08)); margin-bottom: 40px; }
-.score-big { font-family: 'Playfair Display', serif; font-size: 64px; line-height: 1; }
-.verdict-tag { font-family: var(--mono); font-size: 10px; text-transform: uppercase; color: var(--green); margin-top: 10px; display: block; }
-.summary-quote { font-style: italic; font-size: 18px; line-height: 1.6; margin-top: 30px; color: var(--ink2); border-top: 1px solid var(--rule); padding-top: 20px; }
+.close-x {
+  position: absolute;
+  top: 25px;
+  right: 25px;
+  cursor: pointer;
+  font-size: 30px;
+  font-family: var(--mono);
+}
 
-/* Orta & Sağ Kolonlar */
+/* ─── KART DETAYLARI (GÖRSELDEKİ YAPI) ─── */
+.col-left img { width: 100%; margin-bottom: 30px; }
+.score-box { border-top: 1px solid var(--rule); padding-top: 20px; }
+.score-big { font-family: 'Playfair Display', serif; font-size: 50px; }
+
 .section-title {
   font-family: var(--mono);
   font-size: 10px;
@@ -114,141 +102,118 @@ body { background: var(--bg); color: var(--ink); font-family: 'Lora', serif; -we
   color: var(--ink3);
   letter-spacing: 2px;
   border-bottom: 1px solid var(--rule);
-  padding-bottom: 8px;
-  margin-bottom: 20px;
+  margin: 30px 0 15px;
   display: block;
 }
 
-.data-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f9f9f9; font-size: 13px; }
+.data-row { display: flex; justify-content: space-between; font-size: 13px; padding: 8px 0; border-bottom: 1px solid #f9f9f9; }
 .data-val { font-family: var(--mono); font-weight: 500; }
-
-.bar-wrap { margin-bottom: 15px; }
-.bar-label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 5px; }
-.bar-track { height: 2px; background: #eee; }
-.bar-fill { height: 100%; background: var(--ink); }
 
 .trend-pill {
   display: inline-block;
-  padding: 6px 12px;
+  padding: 5px 12px;
   border: 1px solid var(--rule);
   font-family: var(--mono);
-  font-size: 10px;
-  margin: 0 5px 10px 0;
+  font-size: 9px;
+  margin: 0 5px 8px 0;
   border-radius: 2px;
 }
-.trend-pill.hot { border-color: var(--accent); color: var(--accent); }
+.trend-hot { border-color: #c0392b; color: #c0392b; }
 
-@media (max-width: 1000px) { .modal-container { grid-template-columns: 1fr; } }
+/* Bar Animasyonları */
+.bar-track { height: 2px; background: #eee; margin-top: 5px; }
+.bar-fill { height: 100%; background: var(--ink); }
+
+@media (max-width: 900px) { .modal-content { grid-template-columns: 1fr; padding: 30px; } }
 </style>
 </head>
 <body>
 
 <div class="explorer-grid" id="mainGrid"></div>
 
-<div class="modal-overlay" id="infoPopUp">
-  <div class="close-modal" onclick="closePopUp()">×</div>
-  <div id="modalTarget"></div>
+<div id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <div class="close-x" onclick="closeModal()">×</div>
+    <div id="modalBody" style="display: contents;"></div>
+  </div>
 </div>
 
 <script>
-// 40 ARAÇLIK GENİŞLETİLMİŞ VERİ SETİ
-const cars = [
-  { name: 'C-Klasse C300e', make: 'Mercedes-Benz', year: '2022-2025', img: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800', score: '8.6', quote: 'Luxus, 100 km Elektro-Reichweite und Vollgas — der überzeugendste C-Klasse aller Zeiten.', 
-    specs: { service: '25.000 km / 1 J', chain: 'Kette, wartungsfrei', battery: '8 J Garantie', cons: '0,9 l/100km', elRange: '~100 km WLTP' },
-    ratings: { Innenraum: 95, Fahrkomfort: 92, Assistenz: 90 },
-    trends: ['🔥 W206 Spitzenmodell', '100km E-Reichweite', 'Steuerlicher Vorteil'] },
-    
-  { name: '3er 320d Touring', make: 'BMW', year: '2019-2024', img: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800', score: '8.4', quote: 'Der Inbegriff des Geschäftswagens. Effizient, dynamisch und zeitlos im Design.', 
-    specs: { service: '30.000 km / 2 J', chain: 'Kette, wartungsfrei', battery: 'N/A', cons: '5,1 l/100km', elRange: '0 km' },
-    ratings: { Innenraum: 88, Fahrkomfort: 85, Assistenz: 82 },
-    trends: ['Business King', 'Restwertstark', 'Langstrecken-Profi'] },
+// 40 Aracın Bilgileri
+const cars = [];
+const brands = ['Mercedes-Benz', 'BMW', 'Audi', 'VW', 'Porsche', 'Tesla', 'Volvo', 'Land Rover'];
 
-  // ... 40'a tamamlamak için benzer objeler eklenmiştir (Burada 40 örnek listeleniyor)
-  { name: 'Golf 8 GTI', make: 'VW', year: '2021-2024', img: 'https://images.unsplash.com/photo-1621348335014-419089758712?w=800', score: '8.1', quote: 'Die Legende lebt, auch wenn die Software manchmal zickt.', specs: { service: '30k km', chain: 'Riemen (210k)', battery: 'N/A', cons: '7.4L', elRange: '0km' }, ratings: { Innenraum: 80, Fahrkomfort: 75, Assistenz: 85 }, trends: ['Kult', 'Hot Hatch', 'Gebrauchtwert hoch'] },
-  { name: '911 Carrera', make: 'Porsche', year: '2020-2024', img: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800', score: '9.2', quote: 'Perfektion auf Rädern. Teuer, aber jeden Cent wert.', specs: { service: '20k km', chain: 'Kette', battery: 'N/A', cons: '10.5L', elRange: '0km' }, ratings: { Innenraum: 94, Fahrkomfort: 88, Assistenz: 90 }, trends: ['Investment', 'Pure Performance', 'Prestige'] },
-  { name: 'Model 3 Performance', make: 'Tesla', year: '2022-2024', img: 'https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=800', score: '8.8', quote: 'Die Zukunft ist elektrisch und verdammt schnell.', specs: { service: 'Bedarf', chain: 'N/A', battery: '8 J Garantie', cons: '14 kWh', elRange: '540 km' }, ratings: { Innenraum: 75, Fahrkomfort: 80, Assistenz: 98 }, trends: ['Supercharger Network', 'Software King', 'E-Performance'] }
-];
-
-// Listeyi 40'a tamamlayan döngü (Örnek verilerle)
-const brands = ['Audi', 'Volvo', 'Land Rover', 'Jaguar', 'Alfa Romeo', 'Lexus', 'Hyundai', 'Ford'];
-for(let i=6; i<=40; i++) {
-    const brand = brands[i % brands.length];
-    cars.push({
-        name: `${brand} Model ${i}`, make: brand, year: '2023-2025', 
-        img: `https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&sig=${i}`, // Random images
-        score: (Math.random() * (9.5 - 7.0) + 7.0).toFixed(1),
-        quote: 'Ein hervorragendes Beispiel für moderne Ingenieurskunst und Design-Minimalismus.',
-        specs: { service: '30.000 km', chain: 'Kette', battery: 'N/A', cons: '6.2L', elRange: '0km' },
-        ratings: { Innenraum: 85, Fahrkomfort: 80, Assistenz: 88 },
-        trends: ['Modern', 'Nachhaltig', 'Sicher']
-    });
+for(let i=1; i<=40; i++) {
+  const brand = brands[i % brands.length];
+  cars.push({
+    id: i,
+    make: brand,
+    name: brand + ' Model ' + (100 + i),
+    year: '2023-2025',
+    img: `https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600&sig=${i}`, // Temsili görseller
+    score: (8 + Math.random()).toFixed(1),
+    quote: "Ein Meisterwerk an Effizienz und zeitlosem Design.",
+    specs: { service: '25.000 km / 1 J', chain: 'Kette, wartungsfrei', fuel: '4,8 l/100km', battery: '8 Jahre', range: '100km' },
+    ratings: { Innenraum: 90 + (i%10), Komfort: 85 + (i%10), Assistenz: 88 }
+  });
 }
 
-// RENDER GRID
 const grid = document.getElementById('mainGrid');
 cars.forEach(car => {
   const item = document.createElement('div');
   item.className = 'grid-item';
-  item.onclick = () => openPopUp(car);
-  item.innerHTML = `
-    <img src="${car.img}">
-    <div class="item-label">
-      <p>${car.make}</p>
-      <h3>${car.name}</h3>
-    </div>
-  `;
+  item.onclick = () => openModal(car);
+  item.innerHTML = `<img src="${car.img}"><div class="item-label"><p style="font-family:var(--mono); font-size:9px; color:var(--ink3)">${car.make}</p><h3>${car.name}</h3></div>`;
   grid.appendChild(item);
 });
 
-// POP-UP LOGIC
-function openPopUp(car) {
-  const modal = document.getElementById('infoPopUp');
-  const target = document.getElementById('modalTarget');
-  
-  target.innerHTML = `
-    <div class="modal-container">
-      <div class="modal-left">
-        <img src="${car.img}">
-        <div class="score-big">${car.score} <small style="font-size:20px; color:#ccc;">/ 10</small></div>
-        <span class="verdict-tag">● SEHR EMPFEHLENSWERT</span>
-        <div class="summary-quote">„${car.quote}“</div>
-      </div>
-      
-      <div class="modal-mid">
-        <span class="section-title">🔧 Wartung & Reparatur</span>
-        <div class="data-row"><span>Service A/B</span><span class="data-val">${car.specs.service}</span></div>
-        <div class="data-row"><span>Steuerkette</span><span class="data-val">${car.specs.chain}</span></div>
-        <div class="data-row"><span>PHEV-Batterie</span><span class="data-val">${car.specs.battery}</span></div>
-        
-        <span class="section-title" style="margin-top:40px;">⛽ Kraftstoff & Verbrauch</span>
-        <div class="data-row"><span>Verbrauch</span><span class="data-val">${car.specs.cons}</span></div>
-        <div class="data-row"><span>Elektr. Reichweite</span><span class="data-val">${car.specs.elRange}</span></div>
-      </div>
-      
-      <div class="modal-right">
-        <span class="section-title">🪑 Komfort & Ausstattung</span>
-        ${Object.entries(car.ratings).map(([key, val]) => `
-          <div class="bar-wrap">
-            <div class="bar-label"><span>${key}</span><span>${val}</span></div>
-            <div class="bar-track"><div class="bar-fill" style="width:${val}%"></div></div>
-          </div>
-        `).join('')}
-        
-        <span class="section-title" style="margin-top:40px;">📈 Markt & Trend</span>
-        ${car.trends.map(t => `<span class="trend-pill ${t.includes('🔥') ? 'hot' : ''}">${t}</span>`).join('')}
+function openModal(car) {
+  const body = document.getElementById('modalBody');
+  body.innerHTML = `
+    <div class="col-left">
+      <img src="${car.img}">
+      <div class="score-box">
+        <div class="score-big">${car.score} <small style="font-size:15px; color:#ccc;">/ 10</small></div>
+        <p style="font-family:var(--mono); font-size:10px; color:var(--green)">● SEHR EMPFEHLENSWERT</p>
+        <p style="font-style:italic; margin-top:20px; font-size:16px;">„${car.quote}“</p>
       </div>
     </div>
+    
+    <div class="col-mid">
+      <span class="section-title">🔧 Wartung & Reparatur</span>
+      <div class="data-row"><span>Service A/B</span><span class="data-val">${car.specs.service}</span></div>
+      <div class="data-row"><span>Steuerkette</span><span class="data-val">${car.specs.chain}</span></div>
+      <div class="data-row"><span>Garantie</span><span class="data-val">2 Jahre</span></div>
+      
+      <span class="section-title">⛽ Kraftstoff & Verbrauch</span>
+      <div class="data-row"><span>Verbrauch</span><span class="data-val">${car.specs.fuel}</span></div>
+      <div class="data-row"><span>PHEV-Batterie</span><span class="data-val">${car.specs.battery}</span></div>
+      <div class="data-row"><span>E-Reichweite</span><span class="data-val">${car.specs.range}</span></div>
+    </div>
+    
+    <div class="col-right">
+      <span class="section-title">🪑 Komfort & Ausstattung</span>
+      ${Object.entries(car.ratings).map(([key, val]) => `
+        <div style="margin-bottom:15px">
+          <div style="display:flex; justify-content:space-between; font-size:12px"><span>${key}</span><span>${val}</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:${val}%"></div></div>
+        </div>
+      `).join('')}
+      
+      <span class="section-title">📈 Markt & Trend</span>
+      <span class="trend-pill trend-hot">🔥 Top-Modell</span>
+      <span class="trend-pill">Restwert: Stabil</span>
+      <span class="trend-pill">Gefragt</span>
+    </div>
   `;
-  
-  modal.classList.add('active');
+  document.getElementById('modalOverlay').style.display = 'flex';
   document.body.style.overflow = 'hidden';
 }
 
-function closePopUp() {
-  document.getElementById('infoPopUp').classList.remove('active');
+function closeModal(e) {
+  document.getElementById('modalOverlay').style.display = 'none';
   document.body.style.overflow = 'auto';
 }
 </script>
-
 </body>
 </html>
