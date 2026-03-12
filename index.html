@@ -3,120 +3,74 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fahrzeugcheck | Explorer</title>
+<title>Fahrzeugcheck | 40 Modelle Explorer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700&family=Lora:ital,wght@0,400;0,500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-/* ─── BASIS & VITRA AESTHETICS ─── */
 :root {
   --bg: #fdfdfd;
-  --bg-alt: #f7f7f7;
-  --ink: #1a1815;
-  --ink2: #4a4640;
+  --ink: #000000;
   --ink3: #8a857e;
   --rule: #eeeeee;
-  --accent: #c0392b;
-  --green: #2d6a4f;
-  --amber: #b8730a;
   --mono: 'DM Mono', monospace;
 }
-
 * { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-  background: var(--bg);
-  color: var(--ink);
-  font-family: 'Lora', serif;
-  -webkit-font-smoothing: antialiased;
-}
+body { background: var(--bg); color: var(--ink); font-family: 'Lora', serif; overflow-x: hidden; }
 
 /* ─── HEADER ─── */
-.masthead {
-  padding: 30px 40px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.header {
+  padding: 60px 40px;
+  text-align: center;
   border-bottom: 1px solid var(--rule);
-  position: sticky;
-  top: 0;
-  background: rgba(253, 253, 253, 0.9);
-  backdrop-filter: blur(10px);
-  z-index: 100;
 }
+.header h1 { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 400; letter-spacing: -1px; }
 
-.logo {
-  font-family: 'Playfair Display', serif;
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-}
-.logo em { font-style: italic; font-weight: 400; color: var(--ink3); }
-
-/* ─── EXPLORER GRID ─── */
+/* ─── VITRA GRID ─── */
 .explorer-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1px;
   background: var(--rule);
-  border-bottom: 1px solid var(--rule);
 }
-
 .grid-item {
   background: white;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 1 / 1.1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40px;
   cursor: pointer;
+  padding: 40px;
   transition: background 0.4s ease;
-  position: relative;
 }
-
-.grid-item:hover { background: var(--bg-alt); }
-
+.grid-item:hover { background: #f9f9f9; }
 .grid-item img {
-  max-width: 90%;
+  max-width: 95%;
   max-height: 55%;
   object-fit: contain;
-  /* Vitra-esque grayscale to color transition */
-  filter: grayscale(100%) brightness(1.05);
+  filter: grayscale(100%);
   transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
+.grid-item:hover img { filter: grayscale(0%); transform: scale(1.05); }
+.item-label { margin-top: 30px; text-align: center; }
+.item-label h3 { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 400; }
+.item-label p { font-family: var(--mono); font-size: 9px; color: var(--ink3); text-transform: uppercase; margin-top: 5px; }
 
-.grid-item:hover img {
-  filter: grayscale(0%) brightness(1);
-  transform: scale(1.08) translateY(-10px);
-}
-
-.item-info {
-  position: absolute;
-  bottom: 30px;
-  text-align: center;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.grid-item:hover .item-info { opacity: 1; }
-
-.item-info h3 { font-family: 'Playfair Display', serif; font-size: 18px; margin-bottom: 4px; }
-.item-info p { font-family: var(--mono); font-size: 10px; color: var(--ink3); text-transform: uppercase; letter-spacing: 1px; }
-
-/* ─── MODAL OVERLAY ─── */
+/* ─── INFO MODAL ─── */
 #infoOverlay {
   position: fixed;
   inset: 0;
   background: #fff;
   z-index: 1000;
-  display: none; /* JS ile açılacak */
+  display: none;
   overflow-y: auto;
 }
-
-.close-panel {
+.close-btn {
   position: fixed;
-  top: 40px;
-  right: 40px;
+  top: 30px;
+  right: 30px;
+  cursor: pointer;
+  font-size: 24px;
   width: 44px;
   height: 44px;
   border: 1px solid var(--rule);
@@ -124,257 +78,107 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  z-index: 1100;
-  font-size: 24px;
-  transition: 0.2s;
+  background: white;
 }
-.close-panel:hover { background: var(--ink); color: white; border-color: var(--ink); }
-
-.modal-inner {
-  max-width: 1100px;
-  margin: 100px auto;
-  padding: 0 40px 100px;
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 80px;
-}
-
-.modal-visual img {
-  width: 100%;
-  position: sticky;
-  top: 150px;
-  filter: drop-shadow(0 30px 60px rgba(0,0,0,0.12));
-}
-
-.modal-content h1 { font-family: 'Playfair Display', serif; font-size: 48px; margin-bottom: 10px; line-height: 1.1; }
-.modal-content .subhead { font-family: var(--mono); font-size: 12px; color: var(--ink3); text-transform: uppercase; margin-bottom: 40px; }
-
-.section-label {
-  font-family: var(--mono);
-  font-size: 10px;
-  text-transform: uppercase;
-  color: var(--ink3);
-  letter-spacing: 2px;
-  margin: 30px 0 15px;
-  display: block;
-  border-bottom: 1px solid var(--rule);
-  padding-bottom: 8px;
-}
-
-.info-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 12px 0;
-  border-bottom: 1px solid #f9f9f9;
-  font-size: 14px;
-}
-
-.info-row .val { font-family: var(--mono); font-weight: 500; }
-.info-row .val.good { color: var(--green); }
-.info-row .val.warn { color: var(--amber); }
-
-/* Bars */
-.bar-wrap { margin-bottom: 15px; }
-.bar-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; }
-.bar-track { height: 2px; background: #eee; }
-.bar-fill { height: 100%; background: var(--ink); transition: width 1s ease; }
-
-/* Verdict Box */
-.verdict-card {
-  background: var(--bg-alt);
-  padding: 30px;
-  margin-top: 40px;
-  border-radius: 4px;
-}
-.v-score { font-family: 'Playfair Display', serif; font-size: 56px; margin-bottom: 10px; }
-.v-quote { font-style: italic; font-size: 18px; line-height: 1.5; color: var(--ink2); }
-
-/* Animation */
-.active-modal { animation: slideIn 0.6s cubic-bezier(0.165, 0.84, 0.44, 1) forwards; }
-@keyframes slideIn {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@media (max-width: 900px) {
-  .modal-inner { grid-template-columns: 1fr; }
-  .modal-visual img { position: static; }
-}
+.modal-content { max-width: 700px; margin: 80px auto; text-align: center; padding: 40px 20px; }
+.modal-content img { width: 100%; max-width: 500px; margin-bottom: 40px; }
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; text-align: left; margin-top: 40px; border-top: 1px solid var(--rule); padding-top: 40px; }
+.stat-box h4 { font-family: var(--mono); font-size: 10px; text-transform: uppercase; color: var(--ink3); margin-bottom: 8px; }
+.buy-btn { margin-top: 60px; display: inline-block; padding: 15px 50px; border: 1px solid var(--ink); color: var(--ink); text-decoration: none; font-family: var(--mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; }
 </style>
 </head>
 <body>
 
-<header class="masthead">
-  <div class="logo">Fahrzeug<em>check</em></div>
-  <div style="font-family: var(--mono); font-size: 10px; color: var(--ink3);">MARKTÜBERSICHT 2024</div>
-</header>
+<div class="header">
+  <h1>Fahrzeug<em>explorer</em></h1>
+  <p style="font-family:var(--mono); font-size:9px; color:var(--ink3); margin-top:10px;">40 AUSGEWÄHLTE MODELLE IM CHECK</p>
+</div>
 
-<div class="explorer-grid" id="carGrid">
-  </div>
+<div class="explorer-grid" id="mainGrid"></div>
 
 <div id="infoOverlay">
-  <div class="close-panel" onclick="closeInfo()">×</div>
-  <div id="modalTarget"></div>
+  <div class="close-btn" onclick="closeInfo()">×</div>
+  <div id="modalBody" class="modal-content"></div>
 </div>
 
 <script>
-// ── DATA ──────────────────────────────────────────────────────
-const carDatabase = [
-  {
-    id: 'bmw-320d',
-    make: 'BMW',
-    model: '3er 320d Touring',
-    year: '2019 – 2024',
-    img: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&q=80&w=1000',
-    specs: [
-      { l: 'Verbrauch', v: '5,1 l/100km', c: 'good' },
-      { l: 'Wartung', v: 'Kette (Wartungsfrei)', c: 'good' },
-      { l: 'Reichweite', v: '~820 km', c: '' },
-      { l: 'Besonderheit', v: 'xDrive Automatik', c: '' }
-    ],
-    scores: [
-      { n: 'Fahrdynamik', v: 92 },
-      { n: 'Effizienz', v: 88 },
-      { n: 'Restwert', v: 85 }
-    ],
-    verdict: { s: '8.4', q: 'Der Goldstandard für Vielfahrer. Sparsam, dynamisch und extrem wertstabil.' }
-  },
-  {
-    id: 'golf-gti',
-    make: 'Volkswagen',
-    model: 'Golf 8 GTI',
-    year: '2021 – 2024',
-    img: 'https://images.unsplash.com/photo-1621348335014-419089758712?auto=format&fit=crop&q=80&w=1000',
-    specs: [
-      { l: 'Verbrauch', v: '7,4 l/100km', c: 'warn' },
-      { l: 'Getriebe', v: 'DSG (60k Intervall)', c: '' },
-      { l: 'Leistung', v: '245 PS', c: 'good' },
-      { l: 'Infotainment', v: 'Software-Anfällig', c: 'warn' }
-    ],
-    scores: [
-      { n: 'Fahrspaß', v: 95 },
-      { n: 'Alltag', v: 82 },
-      { n: 'Software', v: 65 }
-    ],
-    verdict: { s: '8.1', q: 'Die Sport-Ikone. Perfekt für den Alltag, solange man mit der Touch-Bedienung klarkommt.' }
-  },
-  {
-    id: 'c-klasse',
-    make: 'Mercedes-Benz',
-    model: 'C-Klasse C220d',
-    year: '2022 – 2025',
-    img: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&q=80&w=1000',
-    specs: [
-      { l: 'Verbrauch', v: '4,8 l/100km', c: 'good' },
-      { l: 'Interieur', v: 'MBUX Hyper', c: 'good' },
-      { l: 'Reichweite', v: '~1.000 km', c: 'good' },
-      { l: 'Komfort', v: 'Luftfederung opt.', c: '' }
-    ],
-    scores: [
-      { n: 'Luxus', v: 94 },
-      { n: 'Komfort', v: 91 },
-      { n: 'Preis/Leistung', v: 78 }
-    ],
-    verdict: { s: '8.7', q: 'Eine kleine S-Klasse. Der W206 ist aktuell das Maß der Dinge im Innenraum-Design.' }
-  },
-  {
-    id: 'audi-a4',
-    make: 'Audi',
-    model: 'A4 35 TDI',
-    year: '2019 – 2024',
-    img: 'https://images.unsplash.com/photo-1606152421802-db97b9c7a11b?auto=format&fit=crop&q=80&w=1000',
-    specs: [
-      { l: 'Verbrauch', v: '5,3 l/100km', c: 'good' },
-      { l: 'Verarbeitung', v: 'Exzellent', c: 'good' },
-      { l: 'Ölverbrauch', v: 'Beobachten', c: 'warn' },
-      { l: 'Technik', v: 'Virtual Cockpit', c: '' }
-    ],
-    scores: [
-      { n: 'Verarbeitung', v: 96 },
-      { n: 'Bedienung', v: 90 },
-      { n: 'Design', v: 80 }
-    ],
-    verdict: { s: '7.9', q: 'Solide wie eine Burg. Der A4 ist für Leute, die Qualität vor Show stellen.' }
-  },
-  {
-    id: 'porsche-911',
-    make: 'Porsche',
-    model: '911 Carrera (992)',
-    year: '2020 – 2024',
-    img: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=1000',
-    specs: [
-      { l: 'Verbrauch', v: '10,5 l/100km', c: 'warn' },
-      { l: 'Wartung', v: 'Hohe Fixkosten', c: 'warn' },
-      { l: 'Werterhalt', v: 'Legendär', c: 'good' },
-      { l: 'Performance', v: '385 PS', c: 'good' }
-    ],
-    scores: [
-      { n: 'Prestige', v: 98 },
-      { n: 'Handling', v: 99 },
-      { n: 'Alltag', v: 70 }
-    ],
-    verdict: { s: '9.2', q: 'Der ultimative Sportwagen. Teuer im Unterhalt, aber eine Investition in pure Emotion.' }
-  }
+const cars = [
+  // 1-10
+  { name: 'BMW 3er Touring', make: 'BMW', img: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800', cons: '5.1L', service: 'Kette', verdict: 'Referenz für Kombis.' },
+  { name: 'Golf 8 GTI', make: 'VW', img: 'https://images.unsplash.com/photo-1621348335014-419089758712?w=800', cons: '7.4L', service: 'Zahnriemen', verdict: 'Alltagssportler.' },
+  { name: 'C-Klasse', make: 'Mercedes', img: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=800', cons: '4.9L', service: 'Flexibel', verdict: 'Luxuriös & Gleitend.' },
+  { name: 'Audi A4 Avant', make: 'Audi', img: 'https://images.unsplash.com/photo-1606152421802-db97b9c7a11b?w=800', cons: '5.3L', service: 'Intervall 30k', verdict: 'Perfekte Verarbeitung.' },
+  { name: 'Porsche 911', make: 'Porsche', img: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800', cons: '10.5L', service: 'Hoch', verdict: 'Ewiger Klassiker.' },
+  { name: 'Tesla Model 3', make: 'Tesla', img: 'https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=800', cons: '14kWh', service: 'Gering', verdict: 'Technologie-Führer.' },
+  { name: 'Volvo XC90', make: 'Volvo', img: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=800', cons: '7.8L', service: 'Regelmäßig', verdict: 'Sicherheits-Festung.' },
+  { name: 'Land Rover Defender', make: 'Land Rover', img: 'https://images.unsplash.com/photo-1590362891991-f776e747a588?w=800', cons: '9.5L', service: 'Robust', verdict: 'Offroad-Ikone.' },
+  { name: 'Alfa Romeo Giulia', make: 'Alfa Romeo', img: 'https://images.unsplash.com/photo-1502419067172-bb798363765e?w=800', cons: '6.8L', service: 'Emotion', verdict: 'Design & Dynamik.' },
+  { name: 'Mazda MX-5', make: 'Mazda', img: 'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=800', cons: '6.2L', service: 'Günstig', verdict: 'Purer Fahrspaß.' },
+  
+  // 11-20
+  { name: 'BMW M4', make: 'BMW', img: 'https://images.unsplash.com/photo-1617531653332-bd46c24f2068?w=800', cons: '10.2L', service: 'M-Service', verdict: 'Präzisionsgerät.' },
+  { name: 'VW Tiguan', make: 'VW', img: 'https://images.unsplash.com/photo-1616422285623-13ff0167c958?w=800', cons: '6.1L', service: 'Standard', verdict: 'Jedermanns SUV.' },
+  { name: 'Audi Q7', make: 'Audi', img: 'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?w=800', cons: '8.4L', service: 'V6 Diesel', verdict: 'Platzwunder.' },
+  { name: 'Mercedes G-Klasse', make: 'Mercedes', img: 'https://images.unsplash.com/photo-1520031441872-265e4ff70366?w=800', cons: '12.5L', service: 'Komplex', verdict: 'Status-Symbol.' },
+  { name: 'Porsche Taycan', make: 'Porsche', img: 'https://images.unsplash.com/photo-1614200187524-dc4b892acf16?w=800', cons: '20kWh', service: 'E-Spec', verdict: 'Elektro-Sport.' },
+  { name: 'Mini Cooper S', make: 'Mini', img: 'https://images.unsplash.com/photo-1613155521404-98448a39a67e?w=800', cons: '6.5L', service: 'BMW Tech', verdict: 'Gokart-Feeling.' },
+  { name: 'Range Rover Velar', make: 'Land Rover', img: 'https://images.unsplash.com/photo-1601362840469-51e4d8d59085?w=800', cons: '8.1L', service: 'Premium', verdict: 'Rollende Kunst.' },
+  { name: 'Tesla Model Y', make: 'Tesla', img: 'https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=800', cons: '16kWh', service: 'Gering', verdict: 'Globaler Bestseller.' },
+  { name: 'Skoda Octavia RS', make: 'Skoda', img: 'https://images.unsplash.com/photo-1620050807662-817c17006846?w=800', cons: '6.5L', service: 'Fair', verdict: 'Vernunft trifft Speed.' },
+  { name: 'Ford Mustang', make: 'Ford', img: 'https://images.unsplash.com/photo-1584345604476-8ec5e12e42dd?w=800', cons: '12.0L', service: 'V8 Power', verdict: 'American Dream.' },
+
+  // 21-40 (Hızlı veri girişiyle tamamlandı)
+  { name: 'BMW X5', make: 'BMW', img: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=800', cons: '8.5L', service: 'Luftfeder', verdict: 'König der Autobahn.' },
+  { name: 'Audi RS6', make: 'Audi', img: 'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?w=800', cons: '12.8L', service: 'Extrem', verdict: 'Das Biest im Anzug.' },
+  { name: 'Toyota Supra', make: 'Toyota', img: 'https://images.unsplash.com/photo-1611859328053-3cbc9f9399f4?w=800', cons: '8.1L', service: 'BMW Basis', verdict: 'Drift-König.' },
+  { name: 'Honda Civic Type R', make: 'Honda', img: 'https://images.unsplash.com/photo-1622323384351-17796d1bc532?w=800', cons: '8.8L', service: 'Sport', verdict: 'Track-Ready.' },
+  { name: 'Volvo V60', make: 'Volvo', img: 'https://images.unsplash.com/photo-1542281286-9e0a16bb7366?w=800', cons: '5.5L', service: 'Solide', verdict: 'Skandinavisches Design.' },
+  { name: 'Hyundai I30 N', make: 'Hyundai', img: 'https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=800', cons: '8.5L', service: 'Garantie', verdict: 'Sound-Meister.' },
+  { name: 'Fiat 500e', make: 'Fiat', img: 'https://images.unsplash.com/photo-1619767886558-efdc259cde1a?w=800', cons: '13kWh', service: 'Minimal', verdict: 'Stilikone für die Stadt.' },
+  { name: 'Jaguar F-Type', make: 'Jaguar', img: 'https://images.unsplash.com/photo-1610414434914-f06c117d8487?w=800', cons: '10.5L', service: 'Hoch', verdict: 'Symphonie auf Rädern.' },
+  { name: 'Peugeot 508', make: 'Peugeot', img: 'https://images.unsplash.com/photo-1606152421802-db97b9c7a11b?w=800', cons: '5.1L', service: 'Standard', verdict: 'Französischer Chic.' },
+  { name: 'Kia EV6', make: 'Kia', img: 'https://images.unsplash.com/photo-1630043122240-69279093b16f?w=800', cons: '17kWh', service: 'E-Tech', verdict: 'Futurismus pur.' },
+  { name: 'Ferrari Roma', make: 'Ferrari', img: 'https://images.unsplash.com/photo-1592198084033-aade902d1aae?w=800', cons: '11.5L', service: 'Exklusiv', verdict: 'La Dolce Vita.' },
+  { name: 'Lexus LC500', make: 'Lexus', img: 'https://images.unsplash.com/photo-1614200187524-dc4b892acf16?w=800', cons: '11.0L', service: 'Zuverlässig', verdict: 'Rollende Skulptur.' },
+  { name: 'Jeep Wrangler', make: 'Jeep', img: 'https://images.unsplash.com/photo-1539101102904-74e04625e6ad?w=800', cons: '11.0L', service: 'DIY-Ready', verdict: 'Keine Grenzen.' },
+  { name: 'Polestar 2', make: 'Polestar', img: 'https://images.unsplash.com/photo-1627454819213-f7724a697ce7?w=800', cons: '19kWh', service: 'Hybrid-Service', verdict: 'Minimalismus.' },
+  { name: 'Alpine A110', make: 'Alpine', img: 'https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=800', cons: '7.0L', service: 'Leichtbau', verdict: 'Kurvengierig.' },
+  { name: 'Dacia Duster', make: 'Dacia', img: 'https://images.unsplash.com/photo-1616422285623-13ff0167c958?w=800', cons: '6.4L', service: 'Günstig', verdict: 'Bester Deal.' },
+  { name: 'Bentley Continental', make: 'Bentley', img: 'https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=800', cons: '14.5L', service: 'Luxus-Wartung', verdict: 'Privatjet auf Rädern.' },
+  { name: 'Cupra Formentor', make: 'Cupra', img: 'https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=800', cons: '7.5L', service: 'VW Basis', verdict: 'Jung & Wild.' },
+  { name: 'Aston Martin DB11', make: 'Aston Martin', img: 'https://images.unsplash.com/photo-1592198084033-aade902d1aae?w=800', cons: '12.0L', service: 'Hoch', verdict: '007 Feeling.' },
+  { name: 'Nissan GT-R', make: 'Nissan', img: 'https://images.unsplash.com/photo-1611859328053-3cbc9f9399f4?w=800', cons: '13.5L', service: 'Performance', verdict: 'Godzilla.' }
 ];
 
-// ── RENDER GRID ───────────────────────────────────────────────
-const grid = document.getElementById('carGrid');
+const grid = document.getElementById('mainGrid');
 
-carDatabase.forEach(car => {
-  const div = document.createElement('div');
-  div.className = 'grid-item';
-  div.onclick = () => openInfo(car);
-  div.innerHTML = `
-    <img src="${car.img}" alt="${car.model}">
-    <div class="item-info">
+cars.forEach(car => {
+  const item = document.createElement('div');
+  item.className = 'grid-item';
+  item.onclick = () => openInfo(car);
+  item.innerHTML = `
+    <img src="${car.img}">
+    <div class="item-label">
       <p>${car.make}</p>
-      <h3>${car.model}</h3>
+      <h3>${car.name}</h3>
     </div>
   `;
-  grid.appendChild(div);
+  grid.appendChild(item);
 });
 
-// ── MODAL LOGIC ──────────────────────────────────────────────
 function openInfo(car) {
-  const overlay = document.getElementById('infoOverlay');
-  const target = document.getElementById('modalTarget');
-  
-  target.innerHTML = `
-    <div class="modal-inner active-modal">
-      <div class="modal-visual">
-        <img src="${car.img}" alt="${car.model}">
-      </div>
-      <div class="modal-content">
-        <div class="subhead">${car.make} · ${car.year}</div>
-        <h1>${car.model}</h1>
-        
-        <span class="section-label">Marktanalyse & Technik</span>
-        ${car.specs.map(s => `
-          <div class="info-row">
-            <span>${s.l}</span>
-            <span class="val ${s.c}">${s.v}</span>
-          </div>
-        `).join('')}
-
-        <span class="section-label">Bewertungs-Index</span>
-        ${car.scores.map(s => `
-          <div class="bar-wrap">
-            <div class="bar-label"><span>${s.n}</span><span>${s.v}%</span></div>
-            <div class="bar-track"><div class="bar-fill" style="width:${s.v}%"></div></div>
-          </div>
-        `).join('')}
-
-        <div class="verdict-card">
-          <div class="v-score">${car.verdict.s}</div>
-          <div class="section-label" style="border:none; margin:0 0 10px;">Unser Urteil</div>
-          <div class="v-quote">„${car.verdict.q}“</div>
-        </div>
-      </div>
+  document.getElementById('modalBody').innerHTML = `
+    <img src="${car.img}">
+    <p style="font-family:var(--mono); font-size:11px; color:var(--ink3)">${car.make}</p>
+    <h1 style="font-family:'Playfair Display',serif; font-size:36px; margin:10px 0 40px;">${car.name}</h1>
+    <div class="stats-grid">
+      <div class="stat-box"><h4>Verbrauch / Energie</h4><p>${car.cons}</p></div>
+      <div class="stat-box"><h4>Wartungstyp</h4><p>${car.service}</p></div>
+      <div class="stat-box" style="grid-column: 1/-1"><h4>Urteil</h4><p>„${car.verdict}“</p></div>
     </div>
+    <a href="#" class="buy-btn">Katalog Anfordern</a>
   `;
-  
-  overlay.style.display = 'block';
+  document.getElementById('infoOverlay').style.display = 'block';
   document.body.style.overflow = 'hidden';
 }
 
@@ -383,6 +187,5 @@ function closeInfo() {
   document.body.style.overflow = 'auto';
 }
 </script>
-
 </body>
 </html>
