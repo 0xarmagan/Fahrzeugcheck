@@ -3,31 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fahrzeugcheck | Pure Minimalist</title>
+<title>Fahrzeugcheck | 40 Modelle Fine-Art</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700&family=Lora:ital,wght@0,400;0,500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-/* ─── VITRA PURE STYLE ─── */
 :root {
   --bg: #ffffff;
   --ink: #000000;
   --ink3: #8a857e;
   --mono: 'DM Mono', monospace;
   --green: #2d6a4f;
-  --soft-shadow: 0 20px 60px rgba(0,0,0,0.06);
 }
-
-* { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
 body { background: var(--bg); color: var(--ink); font-family: 'Lora', serif; overflow-x: hidden; }
 
-/* ─── GRID (BORDERLESS) ─── */
+/* ─── VITRA GRID (NO BORDERS) ─── */
 .explorer-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  padding: 40px;
-  gap: 60px 20px; /* Dikeyde daha geniş boşluk */
+  padding: 60px 40px;
+  gap: 80px 40px;
 }
-
 .grid-item {
   background: transparent;
   display: flex;
@@ -35,93 +31,55 @@ body { background: var(--bg); color: var(--ink); font-family: 'Lora', serif; ove
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  padding: 20px;
-  transition: transform 0.4s ease;
 }
-
 .grid-item img {
   max-width: 100%;
   height: auto;
-  /* Tasarım Standardı: Grayscale ve Sıcak Filtre */
-  filter: grayscale(100%) contrast(1.1) brightness(1.02) sepia(5%);
-  transition: all 0.7s cubic-bezier(0.19, 1, 0.22, 1);
-  transform: scale(0.95);
+  filter: grayscale(100%) brightness(1.02) contrast(1.1);
+  transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+  transform: scale(0.92);
 }
-
 .grid-item:hover img {
-  filter: grayscale(0%) contrast(1.05) sepia(0%);
-  transform: scale(1.02);
+  filter: grayscale(0%) brightness(1) contrast(1);
+  transform: scale(1);
 }
+.item-label { margin-top: 30px; text-align: center; }
+.item-label p { font-family: var(--mono); font-size: 9px; text-transform: uppercase; color: var(--ink3); letter-spacing: 2px; }
+.item-label h3 { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 400; margin-top: 5px; }
 
-.item-label {
-  margin-top: 24px;
-  text-align: center;
-  transition: opacity 0.3s;
-}
-
-.item-label p { font-family: var(--mono); font-size: 9px; text-transform: uppercase; color: var(--ink3); letter-spacing: 1.5px; }
-.item-label h3 { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 400; margin-top: 6px; }
-
-/* ─── POP-UP (MODAL) ─── */
+/* ─── POP-UP MODAL ─── */
 #modalOverlay {
   position: fixed;
   inset: 0;
-  background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(12px);
   z-index: 9999;
   display: none;
   justify-content: center;
   align-items: center;
   padding: 20px;
 }
-
 .modal-content {
   background: white;
   width: 100%;
-  max-width: 1100px;
-  max-height: 95vh;
-  box-shadow: var(--soft-shadow);
+  max-width: 1200px;
+  max-height: 90vh;
+  box-shadow: 0 40px 100px rgba(0,0,0,0.08);
   overflow-y: auto;
   position: relative;
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr 0.8fr;
+  grid-template-columns: 1.2fr 0.9fr 0.9fr;
   padding: 80px 60px;
-  gap: 50px;
+  gap: 60px;
 }
+.close-btn { position: absolute; top: 30px; right: 40px; cursor: pointer; font-family: var(--mono); font-size: 12px; letter-spacing: 2px; }
 
-.close-x {
-  position: absolute;
-  top: 30px;
-  right: 40px;
-  cursor: pointer;
-  font-size: 24px;
-  font-family: var(--mono);
-  font-weight: 300;
-}
-
-/* ─── KART İÇERİK ─── */
-.col-left img { width: 100%; margin-bottom: 40px; filter: contrast(1.05); }
-.score-big { font-family: 'Playfair Display', serif; font-size: 60px; letter-spacing: -2px; }
-
-.section-title {
-  font-family: var(--mono);
-  font-size: 10px;
-  text-transform: uppercase;
-  color: var(--ink3);
-  letter-spacing: 2px;
-  border-bottom: 1px solid #f0f0f0;
-  margin: 40px 0 20px;
-  padding-bottom: 8px;
-  display: block;
-}
-
-.data-row { display: flex; justify-content: space-between; font-size: 13px; padding: 12px 0; border-bottom: 1px solid #fafafa; }
+/* INFO KART DETAYLARI */
+.section-title { font-family: var(--mono); font-size: 10px; text-transform: uppercase; color: var(--ink3); letter-spacing: 2.5px; border-bottom: 1px solid #f0f0f0; margin: 40px 0 20px; padding-bottom: 8px; display: block; }
+.data-row { display: flex; justify-content: space-between; font-size: 13.5px; padding: 12px 0; border-bottom: 1px solid #fafafa; }
 .data-val { font-family: var(--mono); font-weight: 500; }
-
-.bar-track { height: 1.5px; background: #f0f0f0; margin-top: 8px; overflow: hidden; }
-.bar-fill { height: 100%; background: var(--ink); width: 0; transition: width 1.2s cubic-bezier(0.19, 1, 0.22, 1); }
-
-@media (max-width: 1000px) { .modal-content { grid-template-columns: 1fr; padding: 40px 20px; } }
+.bar-track { height: 1.5px; background: #f0f0f0; margin-top: 10px; }
+.bar-fill { height: 100%; background: var(--ink); width: 0; transition: width 1.5s cubic-bezier(0.19, 1, 0.22, 1); }
 </style>
 </head>
 <body>
@@ -130,45 +88,67 @@ body { background: var(--bg); color: var(--ink); font-family: 'Lora', serif; ove
 
 <div id="modalOverlay" onclick="closeModal()">
   <div class="modal-content" onclick="event.stopPropagation()">
-    <div class="close-x" onclick="closeModal()">CLOSE</div>
+    <div class="close-btn" onclick="closeModal()">CLOSE ×</div>
     <div id="modalBody" style="display: contents;"></div>
   </div>
 </div>
 
 <script>
-// Tasarlanmış 40 Araç Verisi
-const cars = [];
-const brands = [
-  {m: 'Mercedes-Benz', n: 'C-Klasse C300e', p: '0.9L', r: '100km', i: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=1000&auto=format'},
-  {m: 'BMW', n: '3er Touring M', p: '5.1L', r: 'N/A', i: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=1000&auto=format'},
-  {m: 'Porsche', n: '911 Carrera S', p: '10.5L', r: 'N/A', i: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1000&auto=format'},
-  {m: 'Audi', n: 'RS6 Avant', p: '12.5L', r: 'N/A', i: 'https://images.unsplash.com/photo-1606152421802-db97b9c7a11b?w=1000&auto=format'}
+const carData = [
+  { m: 'Mercedes-Benz', n: 'C 300 e PHEV', s: '8.6', c: '0.9 l', e: '104 km', w: '25.0k km / 1 J', k: 'Kette', q: 'Der Überflieger unter den Hybriden.' },
+  { m: 'BMW', n: 'M3 Competition', s: '9.1', c: '10.2 l', e: '0 km', w: 'M-Service Plan', k: 'Kette', q: 'Präzision in jeder Kurve.' },
+  { m: 'Audi', n: 'RS 6 Avant', s: '8.9', c: '12.4 l', e: '0 km', w: '30.0k km / 2 J', k: 'Kette', q: 'V8 Power trifft Nutzwert.' },
+  { m: 'Porsche', n: '911 GT3 (992)', s: '9.5', c: '13.0 l', e: '0 km', w: 'High-Perf-Svc', k: 'Kette', q: 'Die reinste Form des Fahrens.' },
+  { m: 'Tesla', n: 'Model S Plaid', s: '8.7', c: '18 kWh', e: '600 km', w: 'App-Basiert', k: 'N/A', q: 'Beschleunigung neu definiert.' },
+  { m: 'Volvo', n: 'XC90 Recharge', s: '8.3', c: '2.1 l', e: '70 km', w: '30.0k km', k: 'Riemen (150k)', q: 'Sicherheit auf höchstem Niveau.' },
+  { m: 'Land Rover', n: 'Defender 110', s: '8.2', c: '9.2 l', e: '0 km', w: 'Robust-Plan', k: 'Kette', q: 'Überall zu Hause.' },
+  { m: 'Alfa Romeo', n: 'Giulia QV', s: '8.8', c: '10.5 l', e: '0 km', w: 'Jährlich', k: 'Riemen (Sport)', q: 'Italienische Leidenschaft.' },
+  { m: 'Ferrari', n: '296 GTB', s: '9.4', c: '6.4 l', e: '25 km', w: '7-J-Premium', k: 'Kette', q: 'Klang und Hybrid-Power.' },
+  { m: 'Volkswagen', n: 'Golf 8 R', s: '8.0', c: '7.8 l', e: '0 km', w: '30.0k km', k: 'Kette', q: 'Der ultimative Allrounder.' },
+  { m: 'Bentley', n: 'Continental GT', s: '9.0', c: '13.5 l', e: '0 km', w: 'Besonderer Svc', k: 'Kette', q: 'Luxus ohne Kompromisse.' },
+  { m: 'Maserati', n: 'MC20', s: '9.1', c: '11.5 l', e: '0 km', w: 'Nettuno-Svc', k: 'Kette', q: 'Ein Kunstwerk der Aerodynamik.' },
+  { m: 'Aston Martin', n: 'DB11 V12', s: '8.7', c: '12.8 l', e: '0 km', w: '15.0k km', k: 'Kette', q: 'Britische Eleganz.' },
+  { m: 'Lamborghini', n: 'Urus S', s: '8.5', c: '14.1 l', e: '0 km', w: 'High-Load-Svc', k: 'Kette', q: 'Super-SUV Performance.' },
+  { m: 'Lexus', n: 'LC 500 V8', s: '8.9', c: '11.6 l', e: '0 km', w: 'Relax Garantie', k: 'Kette', q: 'Perfekte Zuverlässigkeit.' },
+  { m: 'Jaguar', n: 'F-Type R', s: '8.4', c: '10.9 l', e: '0 km', w: '26.0k km', k: 'Kette', q: 'Letzter seiner Art.' },
+  { m: 'Hyundai', n: 'Ioniq 5 N', s: '8.8', c: '21 kWh', e: '448 km', w: 'EV-Service', k: 'N/A', q: 'Elektro-Fahrspaß neu gedacht.' },
+  { m: 'Polestar', n: 'Polestar 4', s: '8.3', c: '19 kWh', e: '580 km', w: 'Remote-Check', k: 'N/A', q: 'Minimalismus auf Rädern.' },
+  { m: 'Ford', n: 'Mustang Dark Horse', s: '8.1', c: '12.2 l', e: '0 km', w: 'V8 Service', k: 'Kette', q: 'Pure American Muscle.' },
+  { m: 'Lucid', n: 'Air Sapphire', s: '9.2', c: '16 kWh', e: '700 km', w: 'In-House', k: 'N/A', q: 'Die neue Elektro-Referenz.' },
+  { m: 'Mercedes-Benz', n: 'G 63 AMG', s: '8.4', c: '16.0 l', e: '0 km', w: 'Jährlich', k: 'Kette', q: 'Die Legende auf Rädern.' },
+  { m: 'Audi', n: 'e-tron GT', s: '8.7', c: '20 kWh', e: '480 km', w: 'EV-Plan', k: 'N/A', q: 'Design-Meisterwerk.' },
+  { m: 'Porsche', n: 'Taycan Turbo S', s: '9.3', c: '22 kWh', e: '450 km', w: 'Porsche-E', k: 'N/A', q: 'Der Sportwagen unter den EVs.' },
+  { m: 'BMW', n: 'X5 xDrive50e', s: '8.6', c: '1.1 l', e: '94 km', w: '30.0k km', k: 'Kette', q: 'Souveränität in jeder Lage.' },
+  { m: 'Range Rover', n: 'Sport SV', s: '8.8', c: '11.5 l', e: '0 km', w: 'SV-Wartung', k: 'Kette', q: 'Luxus trifft Dynamik.' },
+  { m: 'Alpine', n: 'A110 S', s: '9.0', c: '7.0 l', e: '0 km', w: 'Leichtbau-Svc', k: 'Kette', q: 'Kurvenkünstler par excellence.' },
+  { m: 'Toyota', n: 'GR Yaris', s: '9.1', c: '8.2 l', e: '0 km', w: '10.0k km', k: 'Kette', q: 'Rallye-DNA für die Straße.' },
+  { m: 'McLaren', n: 'Artura', s: '8.9', c: '4.8 l', e: '31 km', w: 'Track-Plan', k: 'Kette', q: 'High-Tech Leichtbau.' },
+  { m: 'Nissan', n: 'GT-R Nismo', s: '8.7', c: '13.5 l', e: '0 km', w: 'Godzilla-Svc', k: 'Kette', q: 'Unangefochtene Traktion.' },
+  { m: 'Honda', n: 'Civic Type R', s: '8.8', c: '8.4 l', e: '0 km', w: 'Jährlich', k: 'Kette', q: 'Der Frontantrieb-König.' },
+  { m: 'Cadillac', n: 'Escalade V', s: '7.9', c: '18.0 l', e: '0 km', w: 'US-Service', k: 'Kette', q: 'Größe ohne Grenzen.' },
+  { m: 'Rolls-Royce', n: 'Spectre', s: '9.6', c: '21 kWh', e: '520 km', w: 'Langlebigkeit', k: 'N/A', q: 'Die Stille des Luxus.' },
+  { m: 'Lotus', n: 'Emira V6', s: '8.9', c: '11.0 l', e: '0 km', w: 'Sport-Wartung', k: 'Kette', q: 'Analoges Meisterstück.' },
+  { m: 'Bugatti', n: 'Chiron SS', s: '9.8', c: '25.0 l', e: '0 km', w: 'Besuchssvc', k: 'Kette', q: 'Jenseits der Vorstellung.' },
+  { m: 'Koenigsegg', n: 'Jesko', s: '9.9', c: '20.0 l', e: '0 km', w: 'Spezialist', k: 'Kette', q: 'Extreme Ingenieurskunst.' },
+  { m: 'Cupra', n: 'Formentor VZ5', s: '8.4', c: '10.2 l', e: '0 km', w: 'Audi-Engine Svc', k: 'Kette', q: 'Der Fünfzylinder-Rebell.' },
+  { m: 'Skoda', n: 'Superb iV', s: '8.2', c: '1.2 l', e: '100 km', w: '30.0k km', k: 'Riemen', q: 'Der Raum-Riese.' },
+  { m: 'Peugeot', n: '508 PSE', s: '8.1', c: '2.0 l', e: '52 km', w: 'Standard+', k: 'Kette', q: 'Französischer Chic.' },
+  { m: 'Mazda', n: 'CX-60 Diesel', s: '8.0', c: '5.2 l', e: '0 km', w: '20.0k km', k: 'Kette', q: 'Reihensechszylinder-Revival.' },
+  { m: 'Dacia', n: 'Duster III', s: '7.8', c: '5.5 l', e: '0 km', w: 'Günstig', k: 'Kette', q: 'Ehrliche Mobilität.' }
 ];
 
-// Listeyi 40'a tamamlayan stüdyo görselleri ile döngü
-for(let i=0; i<40; i++) {
-  const template = brands[i % brands.length];
-  cars.push({
-    id: i,
-    make: template.m,
-    name: template.n + ' (Edition ' + (i+1) + ')',
-    img: template.i + '&sig=' + i,
-    score: (8.2 + Math.random()).toFixed(1),
-    specs: { service: '25.000 km', chain: 'Wartungsfrei', fuel: template.p, battery: '8 Jahre', range: template.r },
-    ratings: { Interior: 92, Comfort: 88, Tech: 90 }
-  });
-}
-
 const grid = document.getElementById('mainGrid');
-cars.forEach(car => {
+carData.forEach((car, index) => {
   const item = document.createElement('div');
   item.className = 'grid-item';
   item.onclick = () => openModal(car);
+  // Unsplash'tan profesyonel araç görselleri simülasyonu
+  const imgUrl = `https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1000&auto=format&sig=${index}`;
   item.innerHTML = `
-    <img src="${car.img}">
+    <img src="${imgUrl}" alt="${car.n}">
     <div class="item-label">
-      <p>${car.make}</p>
-      <h3>${car.name}</h3>
+      <p>${car.m}</p>
+      <h3>${car.n}</h3>
     </div>
   `;
   grid.appendChild(item);
@@ -178,51 +158,42 @@ function openModal(car) {
   const body = document.getElementById('modalBody');
   body.innerHTML = `
     <div class="col-left">
-      <img src="${car.img}">
-      <div class="score-big">${car.score}</div>
-      <p style="font-family:var(--mono); font-size:10px; letter-spacing:2px; color:var(--green)">● SEHR EMPFEHLENSWERT</p>
-      <p style="font-style:italic; margin-top:30px; font-size:19px; line-height:1.6; color:#333">„Ein Paradebeispiel für skandinavisches Understatement und deutsche Ingenieurskunst.“</p>
+      <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1000&auto=format">
+      <div class="score-big">${car.s}</div>
+      <p style="font-family:var(--mono); font-size:10px; color:var(--green)">● SEHR EMPFEHLENSWERT</p>
+      <p style="font-style:italic; margin-top:30px; font-size:18px; color:#444">„${car.q}“</p>
     </div>
-    
     <div class="col-mid">
-      <span class="section-title">Maintenance</span>
-      <div class="data-row"><span>Service</span><span class="data-val">${car.specs.service}</span></div>
-      <div class="data-row"><span>Timing Chain</span><span class="data-val">${car.specs.chain}</span></div>
-      <div class="data-row"><span>Warranty</span><span class="data-val">24 Months</span></div>
-      
-      <span class="section-title">Efficiency</span>
-      <div class="data-row"><span>Consumption</span><span class="data-val">${car.specs.fuel}</span></div>
-      <div class="data-row"><span>Battery Life</span><span class="data-val">${car.specs.battery}</span></div>
-      <div class="data-row"><span>E-Range</span><span class="data-val">${car.specs.range}</span></div>
+      <span class="section-title">Wartung & Technik</span>
+      <div class="data-row"><span>Service Intervall</span><span class="data-val">${car.w}</span></div>
+      <div class="data-row"><span>Steuerung</span><span class="data-val">${car.k}</span></div>
+      <div class="data-row"><span>Garantie</span><span class="data-val">24 - 60 Mon.</span></div>
+      <span class="section-title" style="margin-top:40px;">Verbrauch & Energie</span>
+      <div class="data-row"><span>Verbrauch (WLTP)</span><span class="data-val">${car.c}</span></div>
+      <div class="data-row"><span>E-Reichweite</span><span class="data-val">${car.e}</span></div>
     </div>
-    
     <div class="col-right">
-      <span class="section-title">Index</span>
-      ${Object.entries(car.ratings).map(([key, val]) => `
-        <div style="margin-bottom:20px">
-          <div style="display:flex; justify-content:space-between; font-size:12px; font-family:var(--mono)"><span>${key}</span><span>${val}%</span></div>
-          <div class="bar-track"><div class="bar-fill" style="width:${val}%"></div></div>
-        </div>
-      `).join('')}
-      
-      <span class="section-title">Trends</span>
-      <div style="display:flex; flex-wrap:wrap; gap:8px">
-        <span style="border:1px solid #000; padding:6px 12px; font-family:var(--mono); font-size:9px">STABLE VALUE</span>
-        <span style="border:1px solid #000; padding:6px 12px; font-family:var(--mono); font-size:9px">HIGH DEMAND</span>
+      <span class="section-title">Bewertung</span>
+      <div style="margin-bottom:15px">
+        <div style="display:flex; justify-content:space-between; font-size:12px; font-family:var(--mono)"><span>Interior</span><span>92%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:92%"></div></div>
+      </div>
+      <div style="margin-bottom:15px">
+        <div style="display:flex; justify-content:space-between; font-size:12px; font-family:var(--mono)"><span>Technik</span><span>88%</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:88%"></div></div>
+      </div>
+      <span class="section-title" style="margin-top:40px;">Status</span>
+      <div style="display:flex; flex-wrap:wrap; gap:10px">
+        <span style="border:1px solid #000; padding:6px 12px; font-family:var(--mono); font-size:9px">STABIL</span>
+        <span style="border:1px solid #000; padding:6px 12px; font-family:var(--mono); font-size:9px">HOT TREND</span>
       </div>
     </div>
   `;
   document.getElementById('modalOverlay').style.display = 'flex';
   document.body.style.overflow = 'hidden';
-  
-  // Bar animasyonunu tetikle
   setTimeout(() => {
-    document.querySelectorAll('.bar-fill').forEach(bar => {
-      const targetWidth = bar.style.width;
-      bar.style.width = '0';
-      setTimeout(() => bar.style.width = targetWidth, 10);
-    });
-  }, 100);
+    document.querySelectorAll('.bar-fill').forEach(bar => bar.style.width = bar.style.width);
+  }, 50);
 }
 
 function closeModal() {
