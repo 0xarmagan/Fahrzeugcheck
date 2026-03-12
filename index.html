@@ -3,17 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fahrzeugcheck | Entdecken</title>
+<title>Fahrzeugcheck | Explorer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700&family=Lora:ital,wght@0,400;0,500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-/* ─── BASIS & VARIABLEN ─── */
+/* ─── BASIS & VITRA AESTHETICS ─── */
 :root {
   --bg: #fdfdfd;
+  --bg-alt: #f7f7f7;
   --ink: #1a1815;
+  --ink2: #4a4640;
   --ink3: #8a857e;
   --rule: #eeeeee;
   --accent: #c0392b;
+  --green: #2d6a4f;
+  --amber: #b8730a;
   --mono: 'DM Mono', monospace;
 }
 
@@ -23,13 +27,15 @@ body {
   background: var(--bg);
   color: var(--ink);
   font-family: 'Lora', serif;
-  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* ─── MASTHEAD ─── */
+/* ─── HEADER ─── */
 .masthead {
-  padding: 40px;
-  text-align: center;
+  padding: 30px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   border-bottom: 1px solid var(--rule);
   position: sticky;
   top: 0;
@@ -40,17 +46,18 @@ body {
 
 .logo {
   font-family: 'Playfair Display', serif;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 700;
   letter-spacing: -0.5px;
 }
+.logo em { font-style: italic; font-weight: 400; color: var(--ink3); }
 
-/* ─── VITRA GRID ─── */
+/* ─── EXPLORER GRID ─── */
 .explorer-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 2px;
-  background: var(--rule); /* Erzeugt feine Linien zwischen den Zellen */
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1px;
+  background: var(--rule);
   border-bottom: 1px solid var(--rule);
 }
 
@@ -61,135 +68,138 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 40px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background 0.4s ease;
   position: relative;
 }
 
-.grid-item:hover {
-  background: #f9f9f9;
-  z-index: 2;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-}
+.grid-item:hover { background: var(--bg-alt); }
 
 .grid-item img {
-  max-width: 80%;
-  max-height: 60%;
+  max-width: 90%;
+  max-height: 55%;
   object-fit: contain;
-  filter: grayscale(100%);
-  transition: filter 0.4s, transform 0.4s;
+  /* Vitra-esque grayscale to color transition */
+  filter: grayscale(100%) brightness(1.05);
+  transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .grid-item:hover img {
-  filter: grayscale(0%);
-  transform: scale(1.05);
+  filter: grayscale(0%) brightness(1);
+  transform: scale(1.08) translateY(-10px);
 }
 
-.grid-item .item-meta {
+.item-info {
   position: absolute;
-  bottom: 20px;
-  font-family: var(--mono);
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: var(--ink3);
+  bottom: 30px;
+  text-align: center;
   opacity: 0;
-  transition: opacity 0.3s;
+  transition: opacity 0.3s ease;
 }
 
-.grid-item:hover .item-meta { opacity: 1; }
+.grid-item:hover .item-info { opacity: 1; }
 
-/* ─── INFO CARD OVERLAY (DYNAMISCH) ─── */
+.item-info h3 { font-family: 'Playfair Display', serif; font-size: 18px; margin-bottom: 4px; }
+.item-info p { font-family: var(--mono); font-size: 10px; color: var(--ink3); text-transform: uppercase; letter-spacing: 1px; }
+
+/* ─── MODAL OVERLAY ─── */
 #infoOverlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.98);
+  inset: 0;
+  background: #fff;
   z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+  display: none; /* JS ile açılacak */
+  overflow-y: auto;
 }
 
-#infoOverlay.active {
-  opacity: 1;
-  visibility: visible;
-}
-
-.close-btn {
-  position: absolute;
+.close-panel {
+  position: fixed;
   top: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 50px;
-  height: 50px;
+  right: 40px;
+  width: 44px;
+  height: 44px;
   border: 1px solid var(--rule);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 20px;
-  transition: 0.3s;
+  z-index: 1100;
+  font-size: 24px;
+  transition: 0.2s;
 }
-.close-btn:hover { border-color: var(--ink); background: var(--ink); color: white; }
+.close-panel:hover { background: var(--ink); color: white; border-color: var(--ink); }
 
-.modal-content {
-  max-width: 900px;
-  width: 90%;
+.modal-inner {
+  max-width: 1100px;
+  margin: 100px auto;
+  padding: 0 40px 100px;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px;
-  align-items: center;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 80px;
 }
 
-.modal-img img {
+.modal-visual img {
   width: 100%;
-  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.1));
+  position: sticky;
+  top: 150px;
+  filter: drop-shadow(0 30px 60px rgba(0,0,0,0.12));
 }
 
-.modal-info h2 { font-family: 'Playfair Display', serif; font-size: 42px; margin-bottom: 10px; }
-.modal-info .sub { font-family: var(--mono); font-size: 12px; color: var(--ink3); text-transform: uppercase; margin-bottom: 30px; }
+.modal-content h1 { font-family: 'Playfair Display', serif; font-size: 48px; margin-bottom: 10px; line-height: 1.1; }
+.modal-content .subhead { font-family: var(--mono); font-size: 12px; color: var(--ink3); text-transform: uppercase; margin-bottom: 40px; }
 
-.data-row {
+.section-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  color: var(--ink3);
+  letter-spacing: 2px;
+  margin: 30px 0 15px;
+  display: block;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 8px;
+}
+
+.info-row {
   display: flex;
   justify-content: space-between;
   padding: 12px 0;
-  border-bottom: 1px solid var(--rule);
+  border-bottom: 1px solid #f9f9f9;
   font-size: 14px;
 }
 
-.buy-btn {
-  margin-top: 40px;
-  display: inline-block;
-  padding: 15px 40px;
-  border: 1px solid var(--ink);
-  text-decoration: none;
-  color: var(--ink);
-  font-family: var(--mono);
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  transition: 0.3s;
-}
-.buy-btn:hover { background: var(--ink); color: white; }
+.info-row .val { font-family: var(--mono); font-weight: 500; }
+.info-row .val.good { color: var(--green); }
+.info-row .val.warn { color: var(--amber); }
 
-/* ─── ANIMATIONEN ─── */
-.active .modal-content { animation: fadeInUp 0.8s both; }
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(40px); }
+/* Bars */
+.bar-wrap { margin-bottom: 15px; }
+.bar-label { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; }
+.bar-track { height: 2px; background: #eee; }
+.bar-fill { height: 100%; background: var(--ink); transition: width 1s ease; }
+
+/* Verdict Box */
+.verdict-card {
+  background: var(--bg-alt);
+  padding: 30px;
+  margin-top: 40px;
+  border-radius: 4px;
+}
+.v-score { font-family: 'Playfair Display', serif; font-size: 56px; margin-bottom: 10px; }
+.v-quote { font-style: italic; font-size: 18px; line-height: 1.5; color: var(--ink2); }
+
+/* Animation */
+.active-modal { animation: slideIn 0.6s cubic-bezier(0.165, 0.84, 0.44, 1) forwards; }
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(30px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-@media (max-width: 768px) {
-  .modal-content { grid-template-columns: 1fr; text-align: center; }
-  .close-btn { top: 20px; }
+@media (max-width: 900px) {
+  .modal-inner { grid-template-columns: 1fr; }
+  .modal-visual img { position: static; }
 }
 </style>
 </head>
@@ -197,65 +207,179 @@ body {
 
 <header class="masthead">
   <div class="logo">Fahrzeug<em>check</em></div>
+  <div style="font-family: var(--mono); font-size: 10px; color: var(--ink3);">MARKTÜBERSICHT 2024</div>
 </header>
 
-<div class="explorer-grid" id="mainGrid">
+<div class="explorer-grid" id="carGrid">
   </div>
 
 <div id="infoOverlay">
-  <div class="close-btn" onclick="closeInfo()">×</div>
-  <div class="modal-content" id="modalBody">
-    </div>
+  <div class="close-panel" onclick="closeInfo()">×</div>
+  <div id="modalTarget"></div>
 </div>
 
 <script>
-const cars = [
-  { id: 1, make: 'BMW', model: '3er M-Sport', img: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&q=80&w=800', consumption: '5.1L', price: 'ab 45.000€' },
-  { id: 2, make: 'VW', model: 'Golf GTI', img: 'https://images.unsplash.com/photo-1621348335014-419089758712?auto=format&fit=crop&q=80&w=800', consumption: '7.0L', price: 'ab 38.000€' },
-  { id: 3, make: 'Audi', model: 'RS6 Avant', img: 'https://images.unsplash.com/photo-1606152421802-db97b9c7a11b?auto=format&fit=crop&q=80&w=800', consumption: '11.5L', price: 'ab 120.000€' },
-  { id: 4, make: 'Porsche', model: '911 Carrera', img: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=800', consumption: '9.4L', price: 'ab 110.000€' },
-  { id: 5, make: 'Mercedes', model: 'G-Klasse', img: 'https://images.unsplash.com/photo-1520031441872-265e4ff70366?auto=format&fit=crop&q=80&w=800', consumption: '12.1L', price: 'ab 140.000€' },
-  { id: 6, make: 'Tesla', model: 'Model S', img: 'https://images.unsplash.com/photo-1617788131775-ceb262947465?auto=format&fit=crop&q=80&w=800', consumption: '0.0L', price: 'ab 95.000€' }
+// ── DATA ──────────────────────────────────────────────────────
+const carDatabase = [
+  {
+    id: 'bmw-320d',
+    make: 'BMW',
+    model: '3er 320d Touring',
+    year: '2019 – 2024',
+    img: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&q=80&w=1000',
+    specs: [
+      { l: 'Verbrauch', v: '5,1 l/100km', c: 'good' },
+      { l: 'Wartung', v: 'Kette (Wartungsfrei)', c: 'good' },
+      { l: 'Reichweite', v: '~820 km', c: '' },
+      { l: 'Besonderheit', v: 'xDrive Automatik', c: '' }
+    ],
+    scores: [
+      { n: 'Fahrdynamik', v: 92 },
+      { n: 'Effizienz', v: 88 },
+      { n: 'Restwert', v: 85 }
+    ],
+    verdict: { s: '8.4', q: 'Der Goldstandard für Vielfahrer. Sparsam, dynamisch und extrem wertstabil.' }
+  },
+  {
+    id: 'golf-gti',
+    make: 'Volkswagen',
+    model: 'Golf 8 GTI',
+    year: '2021 – 2024',
+    img: 'https://images.unsplash.com/photo-1621348335014-419089758712?auto=format&fit=crop&q=80&w=1000',
+    specs: [
+      { l: 'Verbrauch', v: '7,4 l/100km', c: 'warn' },
+      { l: 'Getriebe', v: 'DSG (60k Intervall)', c: '' },
+      { l: 'Leistung', v: '245 PS', c: 'good' },
+      { l: 'Infotainment', v: 'Software-Anfällig', c: 'warn' }
+    ],
+    scores: [
+      { n: 'Fahrspaß', v: 95 },
+      { n: 'Alltag', v: 82 },
+      { n: 'Software', v: 65 }
+    ],
+    verdict: { s: '8.1', q: 'Die Sport-Ikone. Perfekt für den Alltag, solange man mit der Touch-Bedienung klarkommt.' }
+  },
+  {
+    id: 'c-klasse',
+    make: 'Mercedes-Benz',
+    model: 'C-Klasse C220d',
+    year: '2022 – 2025',
+    img: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&q=80&w=1000',
+    specs: [
+      { l: 'Verbrauch', v: '4,8 l/100km', c: 'good' },
+      { l: 'Interieur', v: 'MBUX Hyper', c: 'good' },
+      { l: 'Reichweite', v: '~1.000 km', c: 'good' },
+      { l: 'Komfort', v: 'Luftfederung opt.', c: '' }
+    ],
+    scores: [
+      { n: 'Luxus', v: 94 },
+      { n: 'Komfort', v: 91 },
+      { n: 'Preis/Leistung', v: 78 }
+    ],
+    verdict: { s: '8.7', q: 'Eine kleine S-Klasse. Der W206 ist aktuell das Maß der Dinge im Innenraum-Design.' }
+  },
+  {
+    id: 'audi-a4',
+    make: 'Audi',
+    model: 'A4 35 TDI',
+    year: '2019 – 2024',
+    img: 'https://images.unsplash.com/photo-1606152421802-db97b9c7a11b?auto=format&fit=crop&q=80&w=1000',
+    specs: [
+      { l: 'Verbrauch', v: '5,3 l/100km', c: 'good' },
+      { l: 'Verarbeitung', v: 'Exzellent', c: 'good' },
+      { l: 'Ölverbrauch', v: 'Beobachten', c: 'warn' },
+      { l: 'Technik', v: 'Virtual Cockpit', c: '' }
+    ],
+    scores: [
+      { n: 'Verarbeitung', v: 96 },
+      { n: 'Bedienung', v: 90 },
+      { n: 'Design', v: 80 }
+    ],
+    verdict: { s: '7.9', q: 'Solide wie eine Burg. Der A4 ist für Leute, die Qualität vor Show stellen.' }
+  },
+  {
+    id: 'porsche-911',
+    make: 'Porsche',
+    model: '911 Carrera (992)',
+    year: '2020 – 2024',
+    img: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=1000',
+    specs: [
+      { l: 'Verbrauch', v: '10,5 l/100km', c: 'warn' },
+      { l: 'Wartung', v: 'Hohe Fixkosten', c: 'warn' },
+      { l: 'Werterhalt', v: 'Legendär', c: 'good' },
+      { l: 'Performance', v: '385 PS', c: 'good' }
+    ],
+    scores: [
+      { n: 'Prestige', v: 98 },
+      { n: 'Handling', v: 99 },
+      { n: 'Alltag', v: 70 }
+    ],
+    verdict: { s: '9.2', q: 'Der ultimative Sportwagen. Teuer im Unterhalt, aber eine Investition in pure Emotion.' }
+  }
 ];
 
-const grid = document.getElementById('mainGrid');
+// ── RENDER GRID ───────────────────────────────────────────────
+const grid = document.getElementById('carGrid');
 
-// Grid erstellen
-cars.forEach(car => {
-  const item = document.createElement('div');
-  item.className = 'grid-item';
-  item.onclick = () => openInfo(car);
-  item.innerHTML = `
+carDatabase.forEach(car => {
+  const div = document.createElement('div');
+  div.className = 'grid-item';
+  div.onclick = () => openInfo(car);
+  div.innerHTML = `
     <img src="${car.img}" alt="${car.model}">
-    <div class="item-meta">${car.make} ${car.model}</div>
+    <div class="item-info">
+      <p>${car.make}</p>
+      <h3>${car.model}</h3>
+    </div>
   `;
-  grid.appendChild(item);
+  grid.appendChild(div);
 });
 
+// ── MODAL LOGIC ──────────────────────────────────────────────
 function openInfo(car) {
   const overlay = document.getElementById('infoOverlay');
-  const body = document.getElementById('modalBody');
+  const target = document.getElementById('modalTarget');
   
-  body.innerHTML = `
-    <div class="modal-img">
-      <img src="${car.img}" alt="${car.model}">
-    </div>
-    <div class="modal-info">
-      <div class="sub">${car.make}</div>
-      <h2>${car.model}</h2>
-      <div class="data-row"><span>Verbrauch (WLTP)</span><span>${car.consumption}</span></div>
-      <div class="data-row"><span>Marktpreis ca.</span><span>${car.price}</span></div>
-      <div class="data-row"><span>Status</span><span>Verfügbar</span></div>
-      <a href="#" class="buy-btn">Details ansehen</a>
+  target.innerHTML = `
+    <div class="modal-inner active-modal">
+      <div class="modal-visual">
+        <img src="${car.img}" alt="${car.model}">
+      </div>
+      <div class="modal-content">
+        <div class="subhead">${car.make} · ${car.year}</div>
+        <h1>${car.model}</h1>
+        
+        <span class="section-label">Marktanalyse & Technik</span>
+        ${car.specs.map(s => `
+          <div class="info-row">
+            <span>${s.l}</span>
+            <span class="val ${s.c}">${s.v}</span>
+          </div>
+        `).join('')}
+
+        <span class="section-label">Bewertungs-Index</span>
+        ${car.scores.map(s => `
+          <div class="bar-wrap">
+            <div class="bar-label"><span>${s.n}</span><span>${s.v}%</span></div>
+            <div class="bar-track"><div class="bar-fill" style="width:${s.v}%"></div></div>
+          </div>
+        `).join('')}
+
+        <div class="verdict-card">
+          <div class="v-score">${car.verdict.s}</div>
+          <div class="section-label" style="border:none; margin:0 0 10px;">Unser Urteil</div>
+          <div class="v-quote">„${car.verdict.q}“</div>
+        </div>
+      </div>
     </div>
   `;
   
-  overlay.classList.add('active');
-  document.body.style.overflow = 'hidden'; // Scrollen verhindern
+  overlay.style.display = 'block';
+  document.body.style.overflow = 'hidden';
 }
 
 function closeInfo() {
-  document.getElementById('infoOverlay').classList.remove('active');
+  document.getElementById('infoOverlay').style.display = 'none';
   document.body.style.overflow = 'auto';
 }
 </script>
