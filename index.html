@@ -3,97 +3,105 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fahrzeugcheck | Vitra Style Explorer</title>
+<title>Fahrzeugcheck | Pure Minimalist</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700&family=Lora:ital,wght@0,400;0,500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
+/* ─── VITRA PURE STYLE ─── */
 :root {
-  --bg: #fdfdfd;
+  --bg: #ffffff;
   --ink: #000000;
-  --ink2: #4a4640;
   --ink3: #8a857e;
-  --rule: #eeeeee;
   --mono: 'DM Mono', monospace;
   --green: #2d6a4f;
+  --soft-shadow: 0 20px 60px rgba(0,0,0,0.06);
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+* { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
 body { background: var(--bg); color: var(--ink); font-family: 'Lora', serif; overflow-x: hidden; }
 
-/* ─── GRID SİSTEMİ ─── */
+/* ─── GRID (BORDERLESS) ─── */
 .explorer-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 1px;
-  background: var(--rule);
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  padding: 40px;
+  gap: 60px 20px; /* Dikeyde daha geniş boşluk */
 }
 
 .grid-item {
-  background: white;
-  aspect-ratio: 1 / 1.1;
+  background: transparent;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  padding: 30px;
-  transition: all 0.4s ease;
+  padding: 20px;
+  transition: transform 0.4s ease;
 }
 
 .grid-item img {
-  max-width: 90%;
-  max-height: 50%;
-  object-fit: contain;
-  filter: grayscale(100%);
-  transition: 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  max-width: 100%;
+  height: auto;
+  /* Tasarım Standardı: Grayscale ve Sıcak Filtre */
+  filter: grayscale(100%) contrast(1.1) brightness(1.02) sepia(5%);
+  transition: all 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+  transform: scale(0.95);
 }
 
-.grid-item:hover img { filter: grayscale(0%); transform: scale(1.05); }
+.grid-item:hover img {
+  filter: grayscale(0%) contrast(1.05) sepia(0%);
+  transform: scale(1.02);
+}
 
-.item-label { margin-top: 20px; text-align: center; }
-.item-label h3 { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 400; }
+.item-label {
+  margin-top: 24px;
+  text-align: center;
+  transition: opacity 0.3s;
+}
 
-/* ─── POP-UP (OVERLAY) ─── */
+.item-label p { font-family: var(--mono); font-size: 9px; text-transform: uppercase; color: var(--ink3); letter-spacing: 1.5px; }
+.item-label h3 { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 400; margin-top: 6px; }
+
+/* ─── POP-UP (MODAL) ─── */
 #modalOverlay {
   position: fixed;
   inset: 0;
-  background: rgba(255, 255, 255, 0.92); /* Arka planı görmeyi sağlayan hafif şeffaflık */
-  backdrop-filter: blur(5px); /* Vitra tarzı derinlik */
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(10px);
   z-index: 9999;
   display: none;
   justify-content: center;
   align-items: center;
-  padding: 40px;
+  padding: 20px;
 }
 
 .modal-content {
   background: white;
   width: 100%;
   max-width: 1100px;
-  max-height: 90vh;
-  box-shadow: 0 30px 60px rgba(0,0,0,0.1);
-  border: 1px solid var(--rule);
+  max-height: 95vh;
+  box-shadow: var(--soft-shadow);
   overflow-y: auto;
   position: relative;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  padding: 60px;
-  gap: 40px;
+  grid-template-columns: 1.2fr 0.8fr 0.8fr;
+  padding: 80px 60px;
+  gap: 50px;
 }
 
 .close-x {
   position: absolute;
-  top: 25px;
-  right: 25px;
+  top: 30px;
+  right: 40px;
   cursor: pointer;
-  font-size: 30px;
+  font-size: 24px;
   font-family: var(--mono);
+  font-weight: 300;
 }
 
-/* ─── KART DETAYLARI (GÖRSELDEKİ YAPI) ─── */
-.col-left img { width: 100%; margin-bottom: 30px; }
-.score-box { border-top: 1px solid var(--rule); padding-top: 20px; }
-.score-big { font-family: 'Playfair Display', serif; font-size: 50px; }
+/* ─── KART İÇERİK ─── */
+.col-left img { width: 100%; margin-bottom: 40px; filter: contrast(1.05); }
+.score-big { font-family: 'Playfair Display', serif; font-size: 60px; letter-spacing: -2px; }
 
 .section-title {
   font-family: var(--mono);
@@ -101,60 +109,53 @@ body { background: var(--bg); color: var(--ink); font-family: 'Lora', serif; ove
   text-transform: uppercase;
   color: var(--ink3);
   letter-spacing: 2px;
-  border-bottom: 1px solid var(--rule);
-  margin: 30px 0 15px;
+  border-bottom: 1px solid #f0f0f0;
+  margin: 40px 0 20px;
+  padding-bottom: 8px;
   display: block;
 }
 
-.data-row { display: flex; justify-content: space-between; font-size: 13px; padding: 8px 0; border-bottom: 1px solid #f9f9f9; }
+.data-row { display: flex; justify-content: space-between; font-size: 13px; padding: 12px 0; border-bottom: 1px solid #fafafa; }
 .data-val { font-family: var(--mono); font-weight: 500; }
 
-.trend-pill {
-  display: inline-block;
-  padding: 5px 12px;
-  border: 1px solid var(--rule);
-  font-family: var(--mono);
-  font-size: 9px;
-  margin: 0 5px 8px 0;
-  border-radius: 2px;
-}
-.trend-hot { border-color: #c0392b; color: #c0392b; }
+.bar-track { height: 1.5px; background: #f0f0f0; margin-top: 8px; overflow: hidden; }
+.bar-fill { height: 100%; background: var(--ink); width: 0; transition: width 1.2s cubic-bezier(0.19, 1, 0.22, 1); }
 
-/* Bar Animasyonları */
-.bar-track { height: 2px; background: #eee; margin-top: 5px; }
-.bar-fill { height: 100%; background: var(--ink); }
-
-@media (max-width: 900px) { .modal-content { grid-template-columns: 1fr; padding: 30px; } }
+@media (max-width: 1000px) { .modal-content { grid-template-columns: 1fr; padding: 40px 20px; } }
 </style>
 </head>
 <body>
 
 <div class="explorer-grid" id="mainGrid"></div>
 
-<div id="modalOverlay" onclick="closeModal(event)">
+<div id="modalOverlay" onclick="closeModal()">
   <div class="modal-content" onclick="event.stopPropagation()">
-    <div class="close-x" onclick="closeModal()">×</div>
+    <div class="close-x" onclick="closeModal()">CLOSE</div>
     <div id="modalBody" style="display: contents;"></div>
   </div>
 </div>
 
 <script>
-// 40 Aracın Bilgileri
+// Tasarlanmış 40 Araç Verisi
 const cars = [];
-const brands = ['Mercedes-Benz', 'BMW', 'Audi', 'VW', 'Porsche', 'Tesla', 'Volvo', 'Land Rover'];
+const brands = [
+  {m: 'Mercedes-Benz', n: 'C-Klasse C300e', p: '0.9L', r: '100km', i: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=1000&auto=format'},
+  {m: 'BMW', n: '3er Touring M', p: '5.1L', r: 'N/A', i: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=1000&auto=format'},
+  {m: 'Porsche', n: '911 Carrera S', p: '10.5L', r: 'N/A', i: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1000&auto=format'},
+  {m: 'Audi', n: 'RS6 Avant', p: '12.5L', r: 'N/A', i: 'https://images.unsplash.com/photo-1606152421802-db97b9c7a11b?w=1000&auto=format'}
+];
 
-for(let i=1; i<=40; i++) {
-  const brand = brands[i % brands.length];
+// Listeyi 40'a tamamlayan stüdyo görselleri ile döngü
+for(let i=0; i<40; i++) {
+  const template = brands[i % brands.length];
   cars.push({
     id: i,
-    make: brand,
-    name: brand + ' Model ' + (100 + i),
-    year: '2023-2025',
-    img: `https://images.unsplash.com/photo-1555215695-3004980ad54e?w=600&sig=${i}`, // Temsili görseller
-    score: (8 + Math.random()).toFixed(1),
-    quote: "Ein Meisterwerk an Effizienz und zeitlosem Design.",
-    specs: { service: '25.000 km / 1 J', chain: 'Kette, wartungsfrei', fuel: '4,8 l/100km', battery: '8 Jahre', range: '100km' },
-    ratings: { Innenraum: 90 + (i%10), Komfort: 85 + (i%10), Assistenz: 88 }
+    make: template.m,
+    name: template.n + ' (Edition ' + (i+1) + ')',
+    img: template.i + '&sig=' + i,
+    score: (8.2 + Math.random()).toFixed(1),
+    specs: { service: '25.000 km', chain: 'Wartungsfrei', fuel: template.p, battery: '8 Jahre', range: template.r },
+    ratings: { Interior: 92, Comfort: 88, Tech: 90 }
   });
 }
 
@@ -163,7 +164,13 @@ cars.forEach(car => {
   const item = document.createElement('div');
   item.className = 'grid-item';
   item.onclick = () => openModal(car);
-  item.innerHTML = `<img src="${car.img}"><div class="item-label"><p style="font-family:var(--mono); font-size:9px; color:var(--ink3)">${car.make}</p><h3>${car.name}</h3></div>`;
+  item.innerHTML = `
+    <img src="${car.img}">
+    <div class="item-label">
+      <p>${car.make}</p>
+      <h3>${car.name}</h3>
+    </div>
+  `;
   grid.appendChild(item);
 });
 
@@ -172,45 +179,53 @@ function openModal(car) {
   body.innerHTML = `
     <div class="col-left">
       <img src="${car.img}">
-      <div class="score-box">
-        <div class="score-big">${car.score} <small style="font-size:15px; color:#ccc;">/ 10</small></div>
-        <p style="font-family:var(--mono); font-size:10px; color:var(--green)">● SEHR EMPFEHLENSWERT</p>
-        <p style="font-style:italic; margin-top:20px; font-size:16px;">„${car.quote}“</p>
-      </div>
+      <div class="score-big">${car.score}</div>
+      <p style="font-family:var(--mono); font-size:10px; letter-spacing:2px; color:var(--green)">● SEHR EMPFEHLENSWERT</p>
+      <p style="font-style:italic; margin-top:30px; font-size:19px; line-height:1.6; color:#333">„Ein Paradebeispiel für skandinavisches Understatement und deutsche Ingenieurskunst.“</p>
     </div>
     
     <div class="col-mid">
-      <span class="section-title">🔧 Wartung & Reparatur</span>
-      <div class="data-row"><span>Service A/B</span><span class="data-val">${car.specs.service}</span></div>
-      <div class="data-row"><span>Steuerkette</span><span class="data-val">${car.specs.chain}</span></div>
-      <div class="data-row"><span>Garantie</span><span class="data-val">2 Jahre</span></div>
+      <span class="section-title">Maintenance</span>
+      <div class="data-row"><span>Service</span><span class="data-val">${car.specs.service}</span></div>
+      <div class="data-row"><span>Timing Chain</span><span class="data-val">${car.specs.chain}</span></div>
+      <div class="data-row"><span>Warranty</span><span class="data-val">24 Months</span></div>
       
-      <span class="section-title">⛽ Kraftstoff & Verbrauch</span>
-      <div class="data-row"><span>Verbrauch</span><span class="data-val">${car.specs.fuel}</span></div>
-      <div class="data-row"><span>PHEV-Batterie</span><span class="data-val">${car.specs.battery}</span></div>
-      <div class="data-row"><span>E-Reichweite</span><span class="data-val">${car.specs.range}</span></div>
+      <span class="section-title">Efficiency</span>
+      <div class="data-row"><span>Consumption</span><span class="data-val">${car.specs.fuel}</span></div>
+      <div class="data-row"><span>Battery Life</span><span class="data-val">${car.specs.battery}</span></div>
+      <div class="data-row"><span>E-Range</span><span class="data-val">${car.specs.range}</span></div>
     </div>
     
     <div class="col-right">
-      <span class="section-title">🪑 Komfort & Ausstattung</span>
+      <span class="section-title">Index</span>
       ${Object.entries(car.ratings).map(([key, val]) => `
-        <div style="margin-bottom:15px">
-          <div style="display:flex; justify-content:space-between; font-size:12px"><span>${key}</span><span>${val}</span></div>
+        <div style="margin-bottom:20px">
+          <div style="display:flex; justify-content:space-between; font-size:12px; font-family:var(--mono)"><span>${key}</span><span>${val}%</span></div>
           <div class="bar-track"><div class="bar-fill" style="width:${val}%"></div></div>
         </div>
       `).join('')}
       
-      <span class="section-title">📈 Markt & Trend</span>
-      <span class="trend-pill trend-hot">🔥 Top-Modell</span>
-      <span class="trend-pill">Restwert: Stabil</span>
-      <span class="trend-pill">Gefragt</span>
+      <span class="section-title">Trends</span>
+      <div style="display:flex; flex-wrap:wrap; gap:8px">
+        <span style="border:1px solid #000; padding:6px 12px; font-family:var(--mono); font-size:9px">STABLE VALUE</span>
+        <span style="border:1px solid #000; padding:6px 12px; font-family:var(--mono); font-size:9px">HIGH DEMAND</span>
+      </div>
     </div>
   `;
   document.getElementById('modalOverlay').style.display = 'flex';
   document.body.style.overflow = 'hidden';
+  
+  // Bar animasyonunu tetikle
+  setTimeout(() => {
+    document.querySelectorAll('.bar-fill').forEach(bar => {
+      const targetWidth = bar.style.width;
+      bar.style.width = '0';
+      setTimeout(() => bar.style.width = targetWidth, 10);
+    });
+  }, 100);
 }
 
-function closeModal(e) {
+function closeModal() {
   document.getElementById('modalOverlay').style.display = 'none';
   document.body.style.overflow = 'auto';
 }
