@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fahrzeugcheck | Premium Marktanalyse</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #f8f6f2;
+  --bg2: #ffffff;
+  --ink: #1a1815;
+  --ink2: #4a4640;
+  --ink3: #8a857e;
+  --rule: #e5e0d8;
+  --accent: #c0392b;
+  --accent-light: #fdf2f1;
+  --green: #2d6a4f;
+  --green-light: #f0f7f4;
+  --amber: #b8730a;
+  --amber-light: #fef9ed;
+  --mono: 'DM Mono', monospace;
+  --shadow: 0 20px 50px rgba(0,0,0,0.05);
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Lora', serif;
+  line-height: 1.6;
+  padding-bottom: 100px;
+}
+
+/* ─── MASTHEAD ─── */
+.masthead {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 40px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--ink);
+  text-decoration: none;
+}
+.logo em { font-style: italic; font-weight: 400; color: var(--accent); }
+
+/* ─── SEARCH BOX ─── */
+.search-wrap {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 0 40px;
+}
+
+.search-container {
+  background: var(--bg2);
+  padding: 8px;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  display: flex;
+  border: 1px solid var(--rule);
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  padding: 15px 20px;
+  font-size: 18px;
+  font-family: 'Playfair Display', serif;
+  outline: none;
+  background: transparent;
+}
+
+.search-btn {
+  background: var(--ink);
+  color: white;
+  border: none;
+  padding: 0 30px;
+  border-radius: 8px;
+  font-family: var(--mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.search-btn:hover { background: var(--accent); }
+
+/* ─── RESULT CARD ─── */
+.result-card {
+  max-width: 900px;
+  margin: 60px auto;
+  background: var(--bg2);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--rule);
+  animation: slideUp 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.car-hero {
+  position: relative;
+  height: 480px;
+  overflow: hidden;
+}
+
+.car-hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.car-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 80px 40px 40px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.85));
+  color: white;
+}
+
+.car-make-tag {
+  font-family: var(--mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  opacity: 0.8;
+  margin-bottom: 8px;
+}
+
+.car-title-main {
+  font-family: 'Playfair Display', serif;
+  font-size: 52px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+/* ─── CONTENT GRID ─── */
+.details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  padding: 50px 40px;
+}
+
+.detail-section h4 {
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--ink3);
+  margin-bottom: 24px;
+  border-bottom: 1.5px solid var(--ink);
+  display: inline-block;
+  padding-bottom: 4px;
+}
+
+.metric-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.metric-label { font-size: 15px; color: var(--ink2); }
+.metric-value { font-family: var(--mono); font-size: 14px; font-weight: 500; }
+
+/* ─── SCORE BARS ─── */
+.bar-container { margin-bottom: 20px; }
+.bar-info { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
+.bar-track { height: 3px; background: #eee; border-radius: 2px; }
+.bar-fill { height: 100%; border-radius: 2px; background: var(--ink); width: 0; transition: width 1.2s cubic-bezier(0.1, 0.5, 0.2, 1); }
+
+/* ─── SUMMARY BOX ─── */
+.verdict-box {
+  grid-column: 1 / -1;
+  background: var(--bg);
+  padding: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.v-score {
+  font-family: 'Playfair Display', serif;
+  font-size: 72px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1;
+}
+
+.v-text h5 {
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--ink3);
+  margin-bottom: 10px;
+}
+
+.v-text em { 
+    font-family: 'Playfair Display', serif; 
+    font-size: 22px; 
+    color: var(--ink); 
+    font-style: italic;
+    line-height: 1.4;
+}
+
+/* Utility */
+.hidden { display: none; }
+.good { color: var(--green); }
+.warn { color: var(--amber); }
+
+@media (max-width: 768px) {
+  .details-grid { grid-template-columns: 1fr; gap: 40px; }
+  .car-title-main { font-size: 36px; }
+  .verdict-box { flex-direction: column; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <a href="#" class="logo">Fahrzeug<em>check</em></a>
+</header>
+
+<div class="search-wrap">
+  <div class="search-container">
+    <input type="text" id="searchInput" class="search-input" placeholder="z.B. BMW 3er, Golf GTI, Audi A4...">
+    <button class="search-btn" onclick="runSearch()">Checken</button>
+  </div>
+</div>
+
+<div id="resultContainer" class="hidden">
+    </div>
+
+<script>
+const db = {
+  'bmw 3er': {
+    make: 'BMW',
+    model: '3er 320d Touring',
+    img: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&q=80&w=1200',
+    stats: [
+      { label: 'Verbrauch (Komb.)', val: '5,1 l/100km', cls: 'good' },
+      { label: 'Steuerkette', val: 'Wartungsfrei', cls: 'good' },
+      { label: 'Reichweite', val: '~820 km', cls: '' },
+      { label: 'TÜV-Mängel', val: 'Gering', cls: 'good' }
+    ],
+    scores: [
+      { name: 'Fahrkomfort', val: 88 },
+      { name: 'Effizienz', val: 92 },
+      { name: 'Technik', val: 84 }
+    ],
+    verdict: {
+        score: '8.4',
+        quote: 'Der 320d Touring vereint sparsamen Verbrauch mit echtem Alltagsnutzen — für Vielfahrer kaum zu schlagen.'
+    }
+  },
+  'golf gti': {
+    make: 'Volkswagen',
+    model: 'Golf 8 GTI',
+    img: 'https://images.unsplash.com/photo-1621348335014-419089758712?auto=format&fit=crop&q=80&w=1200',
+    stats: [
+      { label: 'Verbrauch (Komb.)', val: '7,0 l/100km', cls: '' },
+      { label: 'Getriebeöl', val: '60.000 km Intervall', cls: 'warn' },
+      { label: 'Fahrdynamik', val: 'Exzellent', cls: 'good' },
+      { label: 'Infotainment', val: 'SW-Updates nötig', cls: 'warn' }
+    ],
+    scores: [
+      { name: 'Fahrspaß', val: 94 },
+      { name: 'Alltag', val: 80 },
+      { name: 'Bedienung', val: 72 }
+    ],
+    verdict: {
+        score: '8.1',
+        quote: 'Wer Fahrspaß sucht und täglich damit lebt, findet im GTI den perfekten Kompromiss — solange der Verbrauch akzeptiert wird.'
+    }
+  },
+  'audi a4': {
+    make: 'Audi',
+    model: 'A4 35 TDI',
+    img: 'https://images.unsplash.com/photo-1606152421802-db97b9c7a11b?auto=format&fit=crop&q=80&w=1200',
+    stats: [
+      { label: 'Verbrauch', val: '5,3 l/100km', cls: 'good' },
+      { label: 'Verarbeitung', val: 'Referenzklasse', cls: 'good' },
+      { label: 'Ölverbrauch', val: 'Prüfen bei 2.0 TDI', cls: 'warn' },
+      { label: 'Wertstabilität', val: 'Hoch', cls: 'good' }
+    ],
+    scores: [
+      { name: 'Qualität', val: 91 },
+      { name: 'Komfort', val: 86 },
+      { name: 'Design', val: 82 }
+    ],
+    verdict: {
+        score: '7.9',
+        quote: 'Der A4 ist ein verlässlicher Begleiter — wenig Aufsehen, viel Substanz. Ein Klassiker im Business-Segment.'
+    }
+  }
+};
+
+function runSearch() {
+  const query = document.getElementById('searchInput').value.toLowerCase().trim();
+  const car = db[query] || db['bmw 3er']; // Default für Demo-Zwecke
+  
+  const container = document.getElementById('resultContainer');
+  container.classList.remove('hidden');
+  
+  container.innerHTML = `
+    <div class="result-card">
+      <div class="car-hero">
+        <img src="${car.img}" alt="${car.model}">
+        <div class="car-overlay">
+          <div class="car-make-tag">${car.make}</div>
+          <h1 class="car-title-main">${car.model}</h1>
+        </div>
+      </div>
+      
+      <div class="details-grid">
+        <div class="detail-section">
+          <h4>Wichtige Fakten</h4>
+          ${car.stats.map(s => `
+            <div class="metric-row">
+                <span class="metric-label">${s.label}</span>
+                <span class="metric-value ${s.cls}">${s.val}</span>
+            </div>
+          `).join('')}
+        </div>
+
+        <div class="detail-section">
+          <h4>Markt-Index</h4>
+          ${car.scores.map(s => `
+            <div class="bar-container">
+              <div class="bar-info"><span>${s.name}</span><span>${s.val}%</span></div>
+              <div class="bar-track"><div class="bar-fill" data-width="${s.val}%"></div></div>
+            </div>
+          `).join('')}
+        </div>
+
+        <div class="verdict-box">
+          <div class="v-score">${car.verdict.score}</div>
+          <div class="v-text">
+            <h5>Unser Experten-Urteil</h5>
+            <em>„${car.verdict.quote}“</em>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Bar-Animation verzögert triggern
+  setTimeout(() => {
+    document.querySelectorAll('.bar-fill').forEach(bar => {
+      bar.style.width = bar.getAttribute('data-width');
+    });
+  }, 100);
+
+  // Scroll zum Ergebnis
+  container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Enter-Taste Support
+document.getElementById('searchInput').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') runSearch();
+});
+</script>
+</body>
+</html>
